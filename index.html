@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minería de Datos con AdventureWorks2022</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="hero">
+        <nav class="navbar">
+            <h2>Data Mining Blog</h2>
+            <div class="nav-links">
+                <a href="#caratula">Carátula</a>
+                <a href="#ejemplos">Ver ejemplos</a>
+            </div>
+        </nav>
+
+        <section class="hero-content">
+            <span class="badge">Base de Datos II</span>
+            <h1>Minería de Datos usando AdventureWorks2022</h1>
+            <p>
+                Blog académico con 10 ejemplos prácticos de minería de datos utilizando consultas SQL
+                sobre la base de datos AdventureWorks2022.
+            </p>
+        </section>
+    </header>
+
+    <main>
+        <section id="caratula" class="cover-card">
+            <div class="cover-top">
+                <span class="cover-label">Carátula</span>
+                <h2>Blog: Minería de Datos y 10 Ejemplos</h2>
+                <p>Trabajo realizado con la base de datos AdventureWorks2022</p>
+            </div>
+
+            <div class="cover-info">
+                <div>
+                    <span>Nombre</span>
+                    <strong>Carlos Fernando Muñoz Camel</strong>
+                </div>
+                <div>
+                    <span>Carnet</span>
+                    <strong>0903-23-221</strong>
+                </div>
+                <div>
+                    <span>Curso</span>
+                    <strong>Base de Datos II</strong>
+                </div>
+                <div>
+                    <span>Tema</span>
+                    <strong>Minería de Datos usando AdventureWorks2022</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="card intro">
+            <h2>¿Qué es la Minería de Datos?</h2>
+            <p>
+                La minería de datos es el proceso de analizar grandes cantidades de información para descubrir
+                patrones, tendencias, relaciones y comportamientos útiles. En una empresa, permite convertir
+                datos almacenados en conocimiento para mejorar la toma de decisiones.
+            </p>
+            <p>
+                En este blog se utiliza la base de datos <strong>AdventureWorks2022</strong>, la cual simula una
+                empresa dedicada a la venta de bicicletas, accesorios y productos relacionados. Los ejemplos
+                están enfocados en ventas, clientes, productos, territorios y vendedores.
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>Importancia de la Minería de Datos</h2>
+            <p>
+                La minería de datos ayuda a las organizaciones a comprender mejor su información. Por medio de
+                consultas y análisis, una empresa puede identificar productos con mayor demanda, clientes más
+                importantes, regiones con mejores ventas y temporadas con mayor actividad comercial.
+            </p>
+        </section>
+
+        <section id="ejemplos" class="examples">
+            <h2 class="section-title">10 ejemplos de Minería de Datos con SQL</h2>
+
+            <article class="example-card">
+                <div class="example-header">
+                    <span>Ejemplo 1</span>
+                    <h3>Productos más vendidos</h3>
+                </div>
+                <h4>Objetivo</h4>
+                <p>Identificar cuáles son los productos con mayor cantidad vendida dentro de la empresa.</p>
+                <h4>Explicación</h4>
+                <p>Este análisis permite conocer qué productos tienen mayor demanda. Con esta información, la empresa puede tomar decisiones sobre inventario, producción y promociones.</p>
+                <pre><code>USE AdventureWorks2022;
+GO
+
+SELECT TOP 10
+    p.Name AS Producto,
+    SUM(sod.OrderQty) AS CantidadVendida
+FROM Sales.SalesOrderDetail sod
+INNER JOIN Production.Product p
+    ON sod.ProductID = p.ProductID
+GROUP BY p.Name
+ORDER BY CantidadVendida DESC;</code></pre>
+                <h4>Interpretación</h4>
+                <p>El resultado muestra los 10 productos más vendidos. Los primeros lugares representan los productos con mayor aceptación por parte de los clientes.</p>
+            </article>
+
+            <article class="example-card">
+                <div class="example-header">
+                    <span>Ejemplo 2</span>
+                    <h3>Productos que generan más ingresos</h3>
+                </div>
+                <h4>Objetivo</h4>
+                <p>Determinar qué productos generan mayores ingresos para la empresa.</p>
+                <h4>Explicación</h4>
+                <p>No siempre el producto más vendido es el que genera más dinero. Este análisis identifica los productos que más aportan económicamente.</p>
+                <pre><code>USE AdventureWorks2022;
+GO
+
+SELECT TOP 10
+    p.Name AS Producto,
+    SUM(sod.LineTotal) AS TotalIngresos
+FROM Sales.SalesOrderDetail sod
+INNER JOIN Production.Product p
+    ON sod.ProductID = p.ProductID
+GROUP BY p.Name
+ORDER BY TotalIngresos DESC;</code></pre>
+                <h4>Interpretación</h4>
+                <p>El resultado permite conocer los productos más rentables en términos de ingresos totales.</p>
+            </article>
+
+            <article class="example-card">
+                <div class="example-header">
+                    <span>Ejemplo 3</span>
+                    <h3>Ventas por territorio</h3>
+                </div>
+                <h4>Objetivo</h4>
+                <p>Analizar cuáles territorios o regiones generan más ventas.</p>
+                <h4>Explicación</h4>
+                <p>Este análisis ayuda a identificar en qué zonas geográficas la empresa tiene mejor desempeño comercial.</p>
+                <pre><code>USE AdventureWorks2022;
+GO
+
+SELECT 
+    st.Name AS Territorio,
+    st.CountryRegionCode AS Pais,
+    SUM(soh.TotalDue) AS TotalVentas
+FROM Sales.SalesOrderHeader soh
+INNER JOIN Sales.SalesTerritory st
+    ON soh.TerritoryID = st.TerritoryID
+GROUP BY st.Name, st.CountryRegionCode
+ORDER BY TotalVentas DESC;</code></pre>
+                <h4>Interpretación</h4>
+                <p>Los territorios con mayores ventas pueden considerarse mercados fuertes. Los de menor venta pueden requerir nuevas estrategias comerciales.</p>
+            </article>
+
+            <article class="example-card">
+                <div class="example-header">
+                    <span>Ejemplo 4</span>
+                    <h3>Clientes con mayor valor de compra</h3>
+                </div>
+                <h4>Objetivo</h4>
+                <p>Identificar los clientes que más dinero han gastado en la empresa.</p>
+                <h4>Explicación</h4>
+                <p>Este análisis permite reconocer a los clientes más importantes y aplicar estrategias de fidelización o atención personalizada.</p>
+                <pre><code>USE AdventureWorks2022;
+GO
+
+SELECT TOP 10
+    c.CustomerID,
+    SUM(soh.TotalDue) AS TotalComprado
+FROM Sales.Customer c
+INNER JOIN Sales.SalesOrderHeader soh
+    ON c.CustomerID = soh.CustomerID
+GROUP BY c.CustomerID
+ORDER BY TotalComprado DESC;</code></pre>
+                <h4>Interpretación</h4>
+                <p>Los clientes con mayor monto comprado representan clientes de alto valor para la empresa.</p>
+            </article>
+
+            <article class="example-card">
+                <div class="example-header">
+                    <span>Ejemplo 5</span>
+                    <h3>Ventas por año</h3>
+                </div>
+                <h4>Objetivo</h4>
+                <p>Analizar el comportamiento de las ventas a lo largo de los años.</p>
+                <h4>Explicación</h4>
+                <p>Permite observar si las ventas aumentan, disminuyen o se mantienen estables con el paso del tiempo.</p>
+                <pre><code>USE AdventureWorks2022;
+GO
+
+SELECT 
+    YEAR(OrderDate) AS Anio,
+    SUM(TotalDue) AS TotalVentas
+FROM Sales.SalesOrderHeader
+GROUP BY YEAR(OrderDate)
+ORDER BY Anio;</code></pre>
+                <h4>Interpretación</h4>
+                <p>Si las ventas aumentan, puede indicar crecimiento empresarial. Si disminuyen, se deben investigar las causas.</p>
+            </article>
+
+            <article class="example-card">
+                <div class="example-header">
+                    <span>Ejemplo 6</span>
+                    <h3>Ventas por mes</h3>
+                </div>
+                <h4>Objetivo</h4>
+                <p>Identificar los meses con mayor y menor actividad de ventas.</p>
+                <h4>Explicación</h4>
+                <p>Este análisis ayuda a descubrir temporadas altas y bajas para planificar inventario, promociones y campañas.</p>
+                <pre><code>USE AdventureWorks2022;
+GO
+
+SELECT 
+    YEAR(OrderDate) AS Anio,
+    MONTH(OrderDate) AS Mes,
+    SUM(TotalDue) AS TotalVentas
+FROM Sales.SalesOrderHeader
+GROUP BY YEAR(OrderDate), MONTH(OrderDate)
+ORDER BY Anio, Mes;</code></pre>
+                <h4>Interpretación</h4>
+                <p>Los meses con mayor venta pueden representar temporadas fuertes. Los meses con baja venta pueden ser oportunidades para promociones.</p>
+            </article>
+
+            <article class="example-card">
+                <div class="example-header">
+                    <span>Ejemplo 7</span>
+                    <h3>Categorías de productos más vendidas</h3>
+                </div>
+                <h4>Objetivo</h4>
+                <p>Determinar qué categorías de productos tienen mayor demanda.</p>
+                <h4>Explicación</h4>
+                <p>Agrupa las ventas por categoría para conocer qué tipo de productos prefieren los clientes.</p>
+                <pre><code>USE AdventureWorks2022;
+GO
+
+SELECT 
+    pc.Name AS Categoria,
+    SUM(sod.OrderQty) AS CantidadVendida
+FROM Sales.SalesOrderDetail sod
+INNER JOIN Production.Product p
+    ON sod.ProductID = p.ProductID
+INNER JOIN Production.ProductSubcategory ps
+    ON p.ProductSubcategoryID = ps.ProductSubcategoryID
+INNER JOIN Production.ProductCategory pc
+    ON ps.ProductCategoryID = pc.ProductCategoryID
+GROUP BY pc.Name
+ORDER BY CantidadVendida DESC;</code></pre>
+                <h4>Interpretación</h4>
+                <p>El resultado muestra las categorías con mayor cantidad vendida, ayudando a conocer las áreas más fuertes del negocio.</p>
+            </article>
+
+            <article class="example-card">
+                <div class="example-header">
+                    <span>Ejemplo 8</span>
+                    <h3>Promedio de compra por cliente</h3>
+                </div>
+                <h4>Objetivo</h4>
+                <p>Calcular el promedio de dinero que gastan los clientes en sus compras.</p>
+                <h4>Explicación</h4>
+                <p>Este análisis permite estimar el comportamiento promedio de compra y definir estrategias de precios o promociones.</p>
+                <pre><code>USE AdventureWorks2022;
+GO
+
+SELECT 
+    CustomerID,
+    COUNT(SalesOrderID) AS CantidadOrdenes,
+    AVG(TotalDue) AS PromedioCompra
+FROM Sales.SalesOrderHeader
+GROUP BY CustomerID
+ORDER BY PromedioCompra DESC;</code></pre>
+                <h4>Interpretación</h4>
+                <p>Los clientes con mayor promedio de compra pueden considerarse clientes importantes, aunque no compren con tanta frecuencia.</p>
+            </article>
+
+            <article class="example-card">
+                <div class="example-header">
+                    <span>Ejemplo 9</span>
+                    <h3>Vendedores con mayores ventas</h3>
+                </div>
+                <h4>Objetivo</h4>
+                <p>Identificar qué vendedores generan más ingresos para la empresa.</p>
+                <h4>Explicación</h4>
+                <p>Permite evaluar el rendimiento del equipo de ventas y detectar oportunidades de reconocimiento o capacitación.</p>
+                <pre><code>USE AdventureWorks2022;
+GO
+
+SELECT TOP 10
+    sp.BusinessEntityID AS IDVendedor,
+    SUM(soh.TotalDue) AS TotalVentas
+FROM Sales.SalesPerson sp
+INNER JOIN Sales.SalesOrderHeader soh
+    ON sp.BusinessEntityID = soh.SalesPersonID
+GROUP BY sp.BusinessEntityID
+ORDER BY TotalVentas DESC;</code></pre>
+                <h4>Interpretación</h4>
+                <p>Los vendedores con mayores ventas representan un mejor desempeño comercial dentro de la empresa.</p>
+            </article>
+
+            <article class="example-card">
+                <div class="example-header">
+                    <span>Ejemplo 10</span>
+                    <h3>Productos con baja rotación</h3>
+                </div>
+                <h4>Objetivo</h4>
+                <p>Detectar productos que tienen pocas ventas.</p>
+                <h4>Explicación</h4>
+                <p>Este análisis ayuda a encontrar productos con baja demanda para decidir si se aplican descuentos, publicidad o cambios de inventario.</p>
+                <pre><code>USE AdventureWorks2022;
+GO
+
+SELECT TOP 10
+    p.Name AS Producto,
+    SUM(sod.OrderQty) AS CantidadVendida
+FROM Sales.SalesOrderDetail sod
+INNER JOIN Production.Product p
+    ON sod.ProductID = p.ProductID
+GROUP BY p.Name
+ORDER BY CantidadVendida ASC;</code></pre>
+                <h4>Interpretación</h4>
+                <p>Los productos con menor cantidad vendida pueden representar baja rotación de inventario y deben analizarse para decidir una estrategia.</p>
+            </article>
+
+        </section>
+
+        <section class="card conclusion">
+            <h2>Conclusión</h2>
+            <p>
+                La minería de datos es una herramienta importante porque permite transformar datos almacenados
+                en información útil para la toma de decisiones. Con la base de datos AdventureWorks2022 se pueden
+                analizar ventas, clientes, productos, territorios y vendedores.
+            </p>
+            <p>
+                Los 10 ejemplos presentados permiten observar patrones como los productos más vendidos, los
+                clientes con mayor valor, las regiones con mejores ventas y los meses con mayor actividad comercial.
+                Estos análisis ayudan a una empresa a mejorar sus estrategias, optimizar inventarios y tomar
+                decisiones basadas en datos.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Blog académico - Minería de Datos con AdventureWorks2022</p>
+    </footer>
+
+</body>
+</html>
